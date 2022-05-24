@@ -1,0 +1,24 @@
+name: Build Project
+
+on: pull_request
+
+jobs:
+  build:
+    name: Build Project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: action/checkout@v1
+
+      - name: Command to build project
+        run: ./gradlew assemble
+
+  run-tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: action/checkout@v1
+
+      - name: Command to run tests
+      run: ./gradlew test
