@@ -21,4 +21,4 @@ jobs:
         uses: action/checkout@v1
 
       - name: Command to run tests
-      run: ./gradlew test
+        run: ./gradlew test
