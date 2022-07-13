@@ -1,24 +1,35 @@
-name: Build Project
+name: Test and build APK on raising a pull request
 
 on: pull_request
 
 jobs:
-  build:
-    name: Build Project
+  test:
+    name: Run Tests
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v1
-
-      - name: Command to build project
-        run: ./gradlew assemble
-
-  run-tests:
-    name: Run tests
+      - name: Setup JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Run Tests
+        run: bash ./gradlew test --stacktrace  
+  apk:
+    name: Generate APK
+    needs: test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v1
-
-      - name: Command to run tests
-        run: ./gradlew test
+      - name: Setup JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Build APK
+        run: bash ./gradlew assembleDebug --stacktrace
+      - name: Upload APK
+        uses: actions/upload-artifact@v1
+        with:
+          name: apk
+          path: app/build/outputs/apk/debug/app-debug.apk 
